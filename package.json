@@ -11,7 +11,8 @@
 	],
 	"activationEvents": [
 		"onCommand:timely.helloWorld",
-		"onCommand:time.currentTime"
+		"onCommand:time.currentTime",
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
