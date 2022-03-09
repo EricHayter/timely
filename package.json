@@ -10,14 +10,18 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:timely.helloWorld"
+		"onCommand:timely.helloWorld",
+		"onCommand:time.currentTime"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "timely.helloWorld",
-				"title": "Hello World"
+				"title": "Activate Timely"
+			}, {
+				"command": "timely.currentTime",
+				"title": "Current Time"
 			}
 		]
 	},
