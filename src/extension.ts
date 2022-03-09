@@ -1,6 +1,5 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { getVSCodeDownloadUrl } from '@vscode/test-electron/out/util';
 import * as vscode from 'vscode';
 
 // this method is called when your extension is activated
@@ -13,26 +12,32 @@ export function activate(context: vscode.ExtensionContext) {
     // returns all the extensions that VSCode knows of
     let extensions = vscode.extensions.all;
 
+    let possibleThemes: any[] = [];
+
+
     // filter through the extensions for extensions with the category of "themes"
     let extensionsPaths = extensions.filter(e => {
-        if (e.packageJSON.categories && e.packageJSON.categories.indexOf("Themes") != -1) {
+        if (e.packageJSON.categories && e.packageJSON.categories.indexOf("Themes") !== -1) {
             return true;
         }
         // return the directory of each of the extensions
     }).map(e => {
         // creating a function to read the package.json file in the theme folder to find the possible themes
-        async function readDoc() {
-            let doc = vscode.workspace.openTextDocument(e.extensionUri.path + "/package.json");
-            let doc_string = (await doc.then(doc => doc)).getText();
-            let extension_themes = JSON.parse(doc_string).contributes.themes;
-            return extension_themes
+        function readDoc() {
+            let docString = vscode.workspace.openTextDocument(e.extensionUri.path + "/package.json").then(d => {
+                JSON.parse(d.getText()).contributes.themes;
+                return JSON.parse(d.getText());
+            }).then(docText => possibleThemes.push(docText));
+            return docString;
         }
 
         readDoc();
-
     });
 
-    console.log(extensionsPaths)
+    console.log(possibleThemes);
+    
+
+
 
 
 

@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
+// The module 'vscode' contains the VS Code extensibility API
+// Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -9,23 +11,25 @@ function activate(context) {
     // This line of code will only be executed once when your extension is activated
     // returns all the extensions that VSCode knows of
     let extensions = vscode.extensions.all;
+    let possibleThemes = [];
     // filter through the extensions for extensions with the category of "themes"
     let extensionsPaths = extensions.filter(e => {
-        if (e.packageJSON.categories && e.packageJSON.categories.indexOf("Themes") != -1) {
+        if (e.packageJSON.categories && e.packageJSON.categories.indexOf("Themes") !== -1) {
             return true;
         }
         // return the directory of each of the extensions
     }).map(e => {
         // creating a function to read the package.json file in the theme folder to find the possible themes
-        async function readDoc() {
-            let doc = vscode.workspace.openTextDocument(e.extensionUri.path + "/package.json");
-            let doc_string = (await doc.then(doc => doc)).getText();
-            let extension_themes = JSON.parse(doc_string).contributes.themes;
-            return extension_themes;
+        function readDoc() {
+            let docString = vscode.workspace.openTextDocument(e.extensionUri.path + "/package.json").then(d => {
+                JSON.parse(d.getText()).contributes.themes;
+                return JSON.parse(d.getText());
+            }).then(docText => possibleThemes.push(docText));
+            return docString;
         }
         readDoc();
     });
-    console.log(extensionsPaths);
+    console.log(possibleThemes);
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
