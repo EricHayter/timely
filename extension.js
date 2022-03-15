@@ -27,6 +27,11 @@ function activate(context) {
 	let extensions = vscode.extensions.all;
 
     let possibleThemes = [];
+	let themeTypes = {
+		"vs": [],
+		"vs-dark": [],
+		"hc-black": []
+	}
 
 	    // filter through the extensions for extensions with the category of "themes"
 		extensions.filter(e => {
@@ -47,6 +52,7 @@ function activate(context) {
 		});
 	
 		console.log(possibleThemes);
+		console.log(themeTypes);
 }
 
 // this method is called when your extension is deactivated
